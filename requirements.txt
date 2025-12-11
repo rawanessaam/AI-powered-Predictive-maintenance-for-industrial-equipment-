@@ -1,0 +1,28 @@
+# Streamlit
+streamlit
+pandas
+numpy
+matplotlib
+seaborn
+plotly
+
+# Machine Learning
+scikit-learn
+xgboost
+joblib
+
+# PyTorch (CPU-only)
+torch==2.2.0+cpu
+torchvision==0.17.0+cpu
+torchaudio==2.2.0+cpu
+-f https://download.pytorch.org/whl/cpu
+
+# Data processing
+scipy
+pyyaml
+
+# Model evaluation
+statsmodels
+
+# For any deep learning utilities
+tqdm
