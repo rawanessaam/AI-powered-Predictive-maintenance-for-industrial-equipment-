@@ -101,18 +101,49 @@ final_scaler_health.pkl
 
 ## 📁 Repository Structure
 ```
-├── notebooks/
-│   ├── RUL_Model.ipynb
-│   ├── Health_Score_Model.ipynb
-│   ├── XGBoost_Classification.ipynb
-├── deployment/
-│   ├── app.py
-│   ├── FINAL_BEST_HEALTH_MODEL.pth
-│   ├── final_scaler_health.pkl
+Predictive-Maintenance-Project/
+│
 ├── data/
-│   ├── raw_data.csv
-│   ├── preprocessed_data.csv
-├── README.md
+│   ├── preprocessed_smart_data.csv
+│   ├── smart_manufacturing_data_original.csv
+│
+├── deployment/
+│   ├── app_RUL.txt
+│   ├── app_health_score.txt
+│
+├── models/
+│   ├── columns.pkl
+│   ├── model_Maintenance_Required.pkl
+│   ├── model_RUL_LSTM.pth
+│   ├── model_health_score.pth
+│
+├── notebooks/
+│   ├── 01_EDA & Preprocessing.ipynb
+│   ├── 02_Modeling_RUL.ipynb
+│   ├── 03_Modeling_Health_Score.ipynb
+│   ├── 04_Modeling_Maintenance_Required.ipynb
+│   ├── 05_Modeling_Failure_Type.ipynb
+│
+├── reports/
+│   ├── 01_Dataset Exploration Report.pdf
+│   ├── 02_Advanced Analysis Report.pdf
+│   ├── 03_Model Evaluation Report.pdf
+│   ├── Predictive Maintenance Project Report.pdf
+│
+├── ui/
+│   ├── app_RUL/
+│   │   ├── app.py
+│   │   ├── model_RUL_LSTM.pth
+│   │   ├── scaler.pkl
+│   │
+│   ├── app_health_score/
+│       ├── app_health_score.py
+│       ├── model_health_score.pth
+│
+└── Predictive Maintenance for Industrial Equipment Project Presentation.pdf 
+│
+└── README.md
+│
 ├── requirements.txt
 ```
 
