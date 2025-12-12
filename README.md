@@ -1,70 +1,133 @@
-# AI-powered-Predictive-maintenance-for-industrial-equipment-
-DEPI graduation project
-## 📊 Dataset Overview
+# Predictive Maintenance for Industrial Equipment
+A Data-Driven Approach to Forecast Failures, Reduce Downtime, and Improve Operational Efficiency
 
-The Smart Manufacturing IoT-Cloud Monitoring Dataset is designed to facilitate real-time process monitoring, predictive maintenance, and anomaly detection in industrial environments. The dataset simulates IoT sensor readings collected from manufacturing machines, including parameters such as temperature, vibration, humidity, pressure, and energy consumption.
+## 🏭 Project Overview
+This project builds a complete Predictive Maintenance System for industrial machines using IoT sensor data. Our goal is to detect failures early, predict machine degradation, and estimate remaining useful life (RUL) — enabling smarter maintenance decisions and preventing costly downtime.
 
-This dataset helps researchers and engineers develop machine learning models for predictive maintenance, reducing downtime and optimizing operational efficiency. It also includes anomaly flags, failure types, and a target column (maintenance_required), which indicates whether a machine requires maintenance. 
+The system integrates time-series modeling, deep learning, and classification algorithms to provide actionable insights for industrial operations.
 
-| Type | Count |
-|------|-------|
-Total rows | **100,000**  
-Total columns | **13**  
-Numeric columns | **11**  
-Categorical columns | **2**  
-Timestamp column | **1**  
+## 📊 Business Problem
+Manufacturing machines often fail without warning, leading to:
+- Costly unplanned downtime  
+- High emergency repair costs  
+- Overloaded maintenance teams  
+- Lack of visibility into machine health  
+- No data-driven maintenance planning  
 
----
+Predictive Maintenance shifts strategy from reactive → proactive by using real sensor data to predict failures before they happen.
 
-## 🧾 Columns Description
+## 🗂️ Dataset Summary
+We analyzed 100,000+ sensor records from 50 machines, each containing:
+- Temperature  
+- Vibration  
+- Humidity  
+- Energy Consumption  
+- Pressure  
+- Failure Type  
+- Maintenance Required  
+- Timestamp  
 
-| Column | Type | Description |
-|--------|------|-------------|
-`timestamp` | datetime | Timestamp of the machine reading (minute-by-minute log). |
-`machine_id` | int | Unique identifier for each machine (1–50). |
-`temperature` | float | Machine operating temperature (°C). |
-`vibration` | float | Vibration intensity level. |
-`humidity` | float | Humidity level (%) in the machine environment. |
-`pressure` | float | Pressure reading inside the machine system. |
-`energy_consumption` | float | Energy consumed (kWh). |
-`machine_status` | int (0–2) | Machine state: **0 = Idle, 1 = Running, 2 = Maintenance**. |
-`anomaly_flag` | binary | AI-detected anomaly (**0 = Normal, 1 = Suspicious behavior**). |
-`predicted_remaining_life` | int | Estimated Remaining Useful Life (RUL) of the machine. |
-`failure_type` | category | Failure category (e.g., *Normal, Vibration Issue,* etc.). |
-`downtime_risk` | float | Risk score of potential downtime (0–1). |
-`maintenance_required` | binary | **1 = Maintenance required, 0 = No maintenance**. |
+Engineered features:
+- Time-based features  
+- Rolling statistics  
+- Rate-of-change  
+- PCA components  
+- Anomaly-based Z-scores  
 
----
+## 🔧 Preprocessing & Feature Engineering
+Key steps:
+- Timestamp cleaning & sorting  
+- Rolling averages (5-step)  
+- Rate-of-change (diff)  
+- PCA decomposition  
+- Z-score anomaly detection  
+- Outlier awareness (no clipping applied)
 
-## 📐 Statistical Summary — Key Insights
+Main insights:
+- Vibration spikes & temperature drift = strongest failure indicators  
+- Pressure provides moderate insight  
+- Energy & humidity have limited influence  
+- Maintenance machines show higher sensor averages  
 
-- **Temperature:** mean ≈ 75°C, max ≈ 122°C → High-temperature operations  
-- **Vibration:** mean ≈ 50, range **–17 to 114** → Negative values = possible noise/calibration issues  
-- **Humidity:** stable industrial range, **30%–80%**  
-- **Energy Consumption:** mean ≈ 2.75 kWh, max ≈ 5 → Consistent usage  
-- **RUL:** ranges from **1 to 499 hours**  
-- **Downtime Risk:** mean ≈ 0.089 → Mostly low-risk operations  
-- **Anomaly & Maintenance Flags:** rare events → **class imbalance**
+## 🤖 Modeling Overview
 
----
-## 📝 Data Notes
+### 1️⃣ XGBoost Classification Models
 
-- ✅ **No missing values**
-- 🕒 **Time-series data (1-minute resolution)**
-- 🎯 Contains **machine health indicators + failure labels**
-- Suitable for:
+#### Maintenance Required (Binary)
+Predicts whether a machine is at risk.  
+- Handles missing values internally  
+- Captures nonlinear behavior  
 
-| Task | Use Case |
-|------|---------|
-Predictive Maintenance | Forecast machine failures |
-Anomaly Detection | Detect abnormal behavior |
-Time-Series Modeling | LSTM, ARIMA |
-Classification | Failure Type prediction |
-Regression | RUL prediction |
+#### Failure Type (Multiclass)
+Identifies what type of failure is likely.  
+- Supports faster repairs  
+- Uses class balancing  
 
----
+### 2️⃣ LSTM Remaining Useful Life (RUL) Model
+Uses 20-step time-series windows to estimate how long the machine can run before failure.
 
-## 🚀 Summary
+The model learns:
+- Vibration spikes → sharp RUL drops  
+- Temperature drift → slow long-term wear  
+- ROC features → sudden degradation  
 
-This dataset provides comprehensive industrial machine telemetry for **predictive maintenance, anomaly detection, and reliability forecasting**.  
-With sensor data, machine status, and failure labels, it is highly suitable for **supervised learning and time-series analysis**.
+### 3️⃣ LSTM Health Score Model (Final Best Model)
+Outputs a 0–100 continuous machine-health score.
+
+Built using:
+- Z-score degradation  
+- Rolling smoothing  
+- LSTM (182 units, optimized via Optuna)  
+- Adam optimizer (lr = 0.00054)
+
+Performance:
+- R² > 0.90  
+- Low MAE  
+- Smooth, stable predictions  
+
+## 🖥️ Deployment (Streamlit App)
+The dashboard provides:
+- Real-time sensor entry  
+- Safe-range violation alerts  
+- RUL predictions  
+- Health score estimation  
+- Last-20-step sequence preview  
+
+Uses:
+```
+FINAL_BEST_HEALTH_MODEL.pth
+final_scaler_health.pkl
+```
+
+## 📁 Repository Structure
+```
+├── notebooks/
+│   ├── RUL_Model.ipynb
+│   ├── Health_Score_Model.ipynb
+│   ├── XGBoost_Classification.ipynb
+├── deployment/
+│   ├── app.py
+│   ├── FINAL_BEST_HEALTH_MODEL.pth
+│   ├── final_scaler_health.pkl
+├── data/
+│   ├── raw_data.csv
+│   ├── preprocessed_data.csv
+├── README.md
+├── requirements.txt
+```
+
+## 🚀 Key Project Outcomes
+| Technology | Output | Business Value |
+|-----------|--------|----------------|
+| Maintenance Classification | “Is the machine at risk?” | Early alerts |
+| Failure Type Classification | “What is going wrong?” | Faster repairs |
+| RUL Prediction | “How long until failure?” | Maintenance scheduling |
+| Health Score Model | Real-time machine condition | Continuous monitoring |
+
+## 👩‍💻 Team Members
+- Rawan Essam  
+- Mohamed Sobhy  
+- Mostafa Kamel  
+- Mohamed Zakaria  
+- Habiba Ashraf  
+- Rawan Tarek  
