@@ -156,9 +156,8 @@ Predictive-Maintenance-Project/
 | Health Score Model | Real-time machine condition | Continuous monitoring |
 
 ## 👩‍💻 Team Members
-- Rawan Essam  
-- Mohamed Sobhy  
-- Mostafa Kamel  
-- Mohamed Zakaria  
-- Habiba Ashraf  
+- Rawan Essam
+- Mohamed Zakaria
+- Mostafa Kamel 
+- Mohamed Sobhy 
 - Rawan Tarek  
